@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class LivroService {
@@ -65,4 +66,47 @@ public class LivroService {
             throw new RuntimeException("Erro ao ler resposta da API", e);
         }
     }
+
+    public void listarLivrosRegistrados() {
+        List<Livro> livros = livroRepository.findAll();
+
+        if (livros.isEmpty()) {
+            System.out.println("Nenhum livro registrado no sistema.");
+            return;
+        }
+
+        System.out.println("Livros registrados:");
+        for (Livro livro : livros) {
+            System.out.println("----- LIVRO -----");
+            System.out.println("Titulo: " + livro.getTitulo());
+            System.out.println("Autor: " + livro.getAutor().getNome());
+            System.out.println("Idioma: " + livro.getIdioma());
+            System.out.println("Downloads: " + livro.getDownloads());
+
+        }
+    }
+
+    public void listarAutoresRegistrados() {
+        var autores = autorRepository.findAll();
+
+        if (autores.isEmpty()) {
+            System.out.println("Nenhum autor registrado no sistema.");
+            return;
+        }
+
+        System.out.println("Autores registrados:");
+        for (var autor : autores) {
+            String nascimento = (autor.getNascimento() != null) ? String.valueOf(autor.getNascimento().getYear()) : "Desconhecido";
+            String falecimento = (autor.getFalecimento() != null) ? String.valueOf(autor.getFalecimento().getYear()) : "Desconhecido";
+
+            System.out.println("Autor: " + autor.getNome());
+            System.out.println("Nascimento: " + nascimento);
+            System.out.println("Falecimento: " + falecimento);
+            System.out.println("-----------------");
+
+        }
+    }
+
+
+
 }
