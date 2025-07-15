@@ -17,24 +17,40 @@ public class Autor {
 
     private LocalDate falecimento;
 
-    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Livro> livros;
-
 
     public Autor() {}
 
+    public Long getId() {
+        return id;
+    }
 
-    public Long getId() { return id; }
+    public String getNome() {
+        return nome;
+    }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
+    public LocalDate getNascimento() {
+        return nascimento;
+    }
+    public void setNascimento(LocalDate nascimento) {
+        this.nascimento = nascimento;
+    }
 
-    public LocalDate getNascimento() { return nascimento; }
-    public void setNascimento(LocalDate nascimento) { this.nascimento = nascimento; }
+    public LocalDate getFalecimento() {
+        return falecimento;
+    }
+    public void setFalecimento(LocalDate falecimento) {
+        this.falecimento = falecimento;
+    }
 
-    public LocalDate getFalecimento() { return falecimento; }
-    public void setFalecimento(LocalDate falecimento) { this.falecimento = falecimento; }
-
-    public List<Livro> getLivros() { return livros; }
-    public void setLivros(List<Livro> livros) { this.livros = livros; }
+    public List<Livro> getLivros() {
+        return livros;
+    }
+    public void setLivros(List<Livro> livros) {
+        this.livros = livros;
+    }
 }

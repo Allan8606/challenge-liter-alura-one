@@ -82,7 +82,6 @@ public class LivroService {
             System.out.println("Autor: " + livro.getAutor().getNome());
             System.out.println("Idioma: " + livro.getIdioma());
             System.out.println("Downloads: " + livro.getDownloads());
-
         }
     }
 
@@ -100,13 +99,71 @@ public class LivroService {
             String falecimento = (autor.getFalecimento() != null) ? String.valueOf(autor.getFalecimento().getYear()) : "Desconhecido";
 
             System.out.println("Autor: " + autor.getNome());
-            System.out.println("Nascimento: " + nascimento);
-            System.out.println("Falecimento: " + falecimento);
-            System.out.println("-----------------");
+            System.out.println("Ano de Nascimento: " + nascimento);
+            System.out.println("Ano de Falecimento: " + falecimento);
 
+            var livros = autor.getLivros();
+            if (livros != null && !livros.isEmpty()) {
+                System.out.print("Livros: [");
+                for (int i = 0; i < livros.size(); i++) {
+                    System.out.print(livros.get(i).getTitulo());
+                    if (i < livros.size() - 1) {
+                        System.out.print(", ");
+                    }
+                }
+                System.out.println("]");
+            } else {
+                System.out.println("Livros: Nenhum livro cadastrado.");
+            }
+
+            System.out.println("-----------------");
         }
     }
 
+    public void listarAutoresVivosEm(int ano) {
+        var autores = autorRepository.findAll();
 
+        var autoresVivos = autores.stream()
+                .filter(a -> a.getNascimento() != null && a.getNascimento().getYear() <= ano)
+                .filter(a -> a.getFalecimento() == null || a.getFalecimento().getYear() > ano)
+                .toList();
 
+        if (autoresVivos.isEmpty()) {
+            System.out.println("Nenhum autor vivo no ano de " + ano + ".");
+            return;
+        }
+
+        System.out.println("Autores vivos em " + ano + ":");
+        for (var autor : autoresVivos) {
+            String nascimento = String.valueOf(autor.getNascimento().getYear());
+            String falecimento = (autor.getFalecimento() != null) ? String.valueOf(autor.getFalecimento().getYear()) : "Ainda vivo";
+
+            System.out.println("Autor: " + autor.getNome());
+            System.out.println("Nascimento: " + nascimento);
+            System.out.println("Falecimento: " + falecimento);
+            System.out.println("-----------------");
+        }
+    }
+
+    public void listarLivrosPorIdioma(String idiomaUsuario) {
+        String idioma = idiomaUsuario.toLowerCase();
+
+        var livros = livroRepository.findAll()
+                .stream()
+                .filter(l -> l.getIdioma().equalsIgnoreCase(idioma))
+                .toList();
+
+        if (livros.isEmpty()) {
+            System.out.println("Nenhum livro encontrado no idioma: " + idiomaUsuario);
+            return;
+        }
+
+        System.out.println("Livros no idioma " + idiomaUsuario.toUpperCase() + ":");
+        for (var livro : livros) {
+            System.out.println("----- LIVRO -----");
+            System.out.println("Titulo: " + livro.getTitulo());
+            System.out.println("Autor: " + livro.getAutor().getNome());
+            System.out.println("Downloads: " + livro.getDownloads());
+        }
+    }
 }
